@@ -1,0 +1,26 @@
+category,english,spanish,hint
+UI Buttons,Submit,Enviar,Button context: Sending a form
+UI Buttons,Save,Guardar,Preserving data/files
+UI Buttons,Cancel,Cancelar,Stop an action
+Authentication,Log in,Iniciar sesión,Standard Google/FB term in LatAm
+Authentication,Log out,Cerrar sesión,Ending a session
+Actions,Download,Descargar,Getting a file from internet
+Actions,Upload,Subir,Putting a file on the cloud
+UI Navigation,Settings,Configuración,Menu for changing preferences
+UI Actions,Search,Buscar,Finding something via input
+Hardware,Computer,La computadora,General term (Mexico/LatAm)
+Hardware,Laptop,La laptop,Portable computer
+Hardware,Mouse,El ratón,Pointing device
+Hardware,Keyboard,El teclado,Input device
+Hardware,Screen,La pantalla,Display surface
+Hardware,Headphones,Los audífonos,Audio device (LatAm pref)
+Internet,The Cloud,La nube,Remote storage
+Software,Browser,El navegador,Chrome/Edge/Firefox
+Internet,Link,El enlace,Hyperlink connection
+Security,Password,La contraseña,Secret access string
+Social Media,User Profile,El perfil de usuario,Personal page
+Dev Lingo,To debug,Depurar,Fixing code errors
+Backend,Database,La base de datos,Where data is stored
+Social Media,To tag,Etiquetar,Identifying someone in a post
+System,Update (noun),La actualización,New software version
+Settings,Default,Predeterminado,Original setting
