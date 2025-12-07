@@ -3,7 +3,15 @@
 A lightweight Vanilla JS quiz app for learning Mexican/US Spanish (`es-MX`/`es-US`) terminology used in UI/UX and software localization. The quiz tests recognition of preferred terms versus regional variants, Spanglish forms, or ambiguous alternatives.
 
 ## Live Demo
+
 Try the live demo [here](https://ashleysally00.github.io/es-mx-ui-quiz/).
+
+## Dataset  
+
+The terminology list used in this quiz is available as a CSV file:
+
+**[terms.csv](terms.csv)**
+
 
 ## Technical Overview
 * **Architecture:** Zero-dependency Single Page Application (SPA).
