@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mex-Span AI Tech Localization Drill</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --error: #dc2626;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); }
+        p.subtitle { color: #6b7280; font-size: 0.9rem; }
+
+        .card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .progress {
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #6b7280;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .term-display {
+            margin-bottom: 30px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .english-term {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .context-hint {
+            font-style: italic;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        button.option-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        button.option-btn:hover {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        button.option-btn.correct {
+            background-color: #dcfce7;
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        button.option-btn.wrong {
+            background-color: #fee2e2;
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .feedback-area {
+            margin-top: 20px;
+            min-height: 60px;
+            display: none;
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .next-btn:hover { background: #1d4ed8; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>L10n Trainer: US Spanish/Mexico</h1>
+        <p class="subtitle">AI Tech & UI Context Practice</p>
+    </header>
+
+    <div class="card" id="quiz-card">
+        <div class="progress">
+            <span id="score">Score: 0</span>
+            <span id="counter">1 / 50</span>
+        </div>
+
+        <div class="term-display">
+            <span class="category-tag" id="category">Category</span>
+            <div class="english-term" id="question">Loading...</div>
+            <div class="context-hint" id="context"></div>
+        </div>
+
+        <div class="options-grid" id="options">
+            </div>
+
+        <div class="feedback-area" id="feedback">
+            <div id="explanation" style="margin-bottom:10px;"></div>
+            <button class="next-btn" onclick="nextQuestion()">Next Phrase</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data curated for Mexico/LatAm Localization based on your input
+    const database = [
+        // --- UX/UI ACTIONS ---
+        { en: "Submit", es: "Enviar", alt: ["Entregar", "Someter", "Aceptar"], cat: "UI Buttons", hint: "Button context: Sending a form" },
+        { en: "Save", es: "Guardar", alt: ["Salvar", "Ahorrar", "Mantener"], cat: "UI Buttons", hint: "Preserving data/files" },
+        { en: "Cancel", es: "Cancelar", alt: ["Anular", "Borrar", "Detener"], cat: "UI Buttons", hint: "Stop an action" },
+        { en: "Log in", es: "Iniciar sesión", alt: ["Loguearse", "Entrar", "Acceder"], cat: "Authentication", hint: "Standard Google/FB term in LatAm" },
+        { en: "Log out", es: "Cerrar sesión", alt: ["Salir", "Desloguearse", "Terminar"], cat: "Authentication", hint: "Ending a session" },
+        { en: "Download", es: "Descargar", alt: ["Bajar", "Cargar", "Obtener"], cat: "Actions", hint: "Getting a file from internet" },
+        { en: "Upload", es: "Subir", alt: ["Cargar", "Montar", "Elevar"], cat: "Actions", hint: "Putting a file on the cloud" },
+        { en: "Settings", es: "Configuración", alt: ["Ajustes", "Opciones", "Seteo"], cat: "UI Navigation", hint: "Menu for changing preferences" },
+        { en: "Search", es: "Buscar", alt: ["Investigar", "Mirar", "Explorar"], cat: "UI Actions", hint: "Finding something via input" },
+        
+        // --- HARDWARE (Mexico focus) ---
+        { en: "Computer", es: "La computadora", alt: ["El ordenador", "El computador", "La máquina"], cat: "Hardware", hint: "General term (Mexico/LatAm)" },
+        { en: "Laptop", es: "La laptop / La computadora portátil", alt: ["El ordenador portátil", "La libreta", "El portátil"], cat: "Hardware", hint: "Portable computer" },
+        { en: "Mouse", es: "El ratón", alt: ["El mouse", "El apuntador", "El deslizador"], cat: "Hardware", hint: "Pointing device" },
+        { en: "Keyboard", es: "El teclado", alt: ["Las teclas", "La botonera", "El typer"], cat: "Hardware", hint: "Input device" },
+        { en: "Screen", es: "La pantalla", alt: ["El monitor", "El vidrio", "La visión"], cat: "Hardware", hint: "Display surface" },
+        { en: "Headphones", es: "Los audífonos", alt: ["Los cascos", "Los auriculares", "Las orejeras"], cat: "Hardware", hint: "Audio device (LatAm pref)" },
+        
+        // --- SOFTWARE & INTERNET ---
+        { en: "The Cloud", es: "La nube", alt: ["El cielo", "El servidor", "La red"], cat: "Internet", hint: "Remote storage" },
+        { en: "Browser", es: "El navegador", alt: ["El buscador", "El explorador", "La ventana"], cat: "Software", hint: "Chrome, Edge, Firefox" },
+        { en: "Link", es: "El enlace", alt: ["El link", "La conexión", "El puente"], cat: "Internet", hint: "Hyperlink connection" },
+        { en: "Password", es: "La contraseña", alt: ["La clave", "El código", "El password"], cat: "Security", hint: "Secret access string" },
+        { en: "User Profile", es: "El perfil de usuario", alt: ["La cuenta", "La cara", "El dato"], cat: "Social Media", hint: "Personal page" },
+        
+        // --- AI & TECH SPECIFIC ---
+        { en: "To debug", es: "Depurar", alt: ["Desbuguear", "Arreglar", "Limpiar"], cat: "Dev Lingo", hint: "Fixing code errors" },
+        { en: "Database", es: "La base de datos", alt: ["El banco de datos", "La información", "El archivo"], cat: "Backend", hint: "Where data is stored" },
+        { en: "To tag", es: "Etiquetar", alt: ["Nombrar", "Marcar", "Señalar"], cat: "Social Media", hint: "Identifying someone in a post" },
+        { en: "Update (noun)", es: "La actualización", alt: ["La mejora", "El update", "La subida"], cat: "System", hint: "New software version" },
+        { en: "Default", es: "Predeterminado", alt: ["Por defecto", "Estándar", "Normal"], cat: "Settings", hint: "Original setting" },
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let shuffledDB = [];
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function init() {
+        shuffledDB = shuffle([...database]); // randomize order of questions
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const item = shuffledDB[currentQ];
+        
+        // Update UI text
+        document.getElementById('counter').innerText = `${currentQ + 1} / ${shuffledDB.length}`;
+        document.getElementById('category').innerText = item.cat;
+        document.getElementById('question').innerText = item.en;
+        document.getElementById('context').innerText = item.hint;
+        document.getElementById('feedback').style.display = 'none';
+
+        // Prepare options (Correct + 3 Distractors)
+        // We take the correct answer, plus the 'alt' array
+        let choices = [{txt: item.es, isCorrect: true}];
+        item.alt.forEach(alt => choices.push({txt: alt, isCorrect: false}));
+        
+        choices = shuffle(choices);
+
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = ''; // clear old buttons
+
+        choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = choice.txt;
+            btn.onclick = () => checkAnswer(btn, choice.isCorrect, item.es);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(btn, isCorrect, correctAnswer) {
+        // Disable all buttons to prevent double clicking
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        const feedbackArea = document.getElementById('feedback');
+        const explanation = document.getElementById('explanation');
+        feedbackArea.style.display = 'block';
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            explanation.innerHTML = `<strong>Correct!</strong> <br>"${correctAnswer}" is the standard term.`;
+            score++;
+            document.getElementById('score').innerText = `Score: ${score}`;
+        } else {
+            btn.classList.add('wrong');
+            // Highlight the real answer
+            allBtns.forEach(b => {
+                if(b.innerText === correctAnswer) b.classList.add('correct');
+            });
+            explanation.innerHTML = `<strong>Incorrect.</strong> <br>The localization standard is "${correctAnswer}".`;
+        }
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if (currentQ < shuffledDB.length) {
+            loadQuestion();
+        } else {
+            // End of quiz
+            document.getElementById('quiz-card').innerHTML = `
+                <h2>Drill Complete!</h2>
+                <p>Final Score: ${score} / ${shuffledDB.length}</p>
+                <button class="next-btn" onclick="location.reload()">Restart</button>
+            `;
+        }
+    }
+
+    // Start App
+    init();
+
+</script>
+
+</body>
+</html>
