@@ -47,16 +47,61 @@
             text-align: center;
         }
 
+        /* ANIMATION ADDED HERE */
+        .fade-in {
+            animation: fade 0.4s ease-out;
+        }
+        
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MENU STYLES */
+        .level-menu {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .level-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .level-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .level-desc {
+            font-size: 0.8rem;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 4px;
+            text-align: left;
+        }
+
+        /* QUIZ STYLES */
+        .quiz-interface { display: none; }
+
         .progress {
             margin-bottom: 20px;
             font-size: 0.85rem;
             color: #6b7280;
             display: flex;
             justify-content: space-between;
-        }
-
-        .term-display {
-            margin-bottom: 30px;
         }
 
         .category-tag {
@@ -72,15 +117,17 @@
         }
 
         .english-term {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
             margin-bottom: 10px;
+            line-height: 1.3;
         }
 
         .context-hint {
             font-style: italic;
             color: #6b7280;
             font-size: 0.95rem;
+            margin-bottom: 20px;
         }
 
         .options-grid {
@@ -121,7 +168,8 @@
 
         .feedback-area {
             margin-top: 20px;
-            min-height: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
             display: none;
         }
 
@@ -137,6 +185,15 @@
         }
         
         .next-btn:hover { background: #1d4ed8; }
+        
+        .home-btn {
+            background: transparent;
+            color: #6b7280;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
 
     </style>
 </head>
@@ -145,100 +202,140 @@
 <div class="container">
     <header>
         <h1>L10n Trainer: US Spanish/Mexico</h1>
-        <p class="subtitle">AI Tech & UI Context Practice</p>
+        <p class="subtitle">Select your difficulty level</p>
     </header>
 
-    <div class="card" id="quiz-card">
-        <div class="progress">
-            <span id="score">Score: 0</span>
-            <span id="counter">1 / 50</span>
+    <div class="card" id="main-card">
+        
+        <div id="menu" class="level-menu fade-in">
+            <button class="level-btn" onclick="startLevel(1)">
+                <div style="text-align: left;">
+                    Level 1: Basic Terminology
+                    <div class="level-desc">Single words & Buttons (Submit, Save, Cloud)</div>
+                </div>
+                <span>➔</span>
+            </button>
+            
+            <button class="level-btn" onclick="startLevel(2)">
+                <div style="text-align: left;">
+                    Level 2: UX Phrases
+                    <div class="level-desc">Friction, Onboarding, and Errors</div>
+                </div>
+                <span>➔</span>
+            </button>
         </div>
 
-        <div class="term-display">
-            <span class="category-tag" id="category">Category</span>
-            <div class="english-term" id="question">Loading...</div>
-            <div class="context-hint" id="context"></div>
-        </div>
-
-        <div class="options-grid" id="options">
+        <div id="quiz" class="quiz-interface">
             </div>
-
-        <div class="feedback-area" id="feedback">
-            <div id="explanation" style="margin-bottom:10px;"></div>
-            <button class="next-btn" onclick="nextQuestion()">Next Phrase</button>
-        </div>
+        
     </div>
 </div>
 
 <script>
-    // Data curated for Mexico/LatAm Localization based on your input
-    const database = [
-        // --- UX/UI ACTIONS ---
+    // --- DATABASE 1: BASICS ---
+    const dataLevel1 = [
         { en: "Submit", es: "Enviar", alt: ["Entregar", "Someter", "Aceptar"], cat: "UI Buttons", hint: "Button context: Sending a form" },
         { en: "Save", es: "Guardar", alt: ["Salvar", "Ahorrar", "Mantener"], cat: "UI Buttons", hint: "Preserving data/files" },
         { en: "Cancel", es: "Cancelar", alt: ["Anular", "Borrar", "Detener"], cat: "UI Buttons", hint: "Stop an action" },
         { en: "Log in", es: "Iniciar sesión", alt: ["Loguearse", "Entrar", "Acceder"], cat: "Authentication", hint: "Standard Google/FB term in LatAm" },
         { en: "Log out", es: "Cerrar sesión", alt: ["Salir", "Desloguearse", "Terminar"], cat: "Authentication", hint: "Ending a session" },
         { en: "Download", es: "Descargar", alt: ["Bajar", "Cargar", "Obtener"], cat: "Actions", hint: "Getting a file from internet" },
-        { en: "Upload", es: "Subir", alt: ["Cargar", "Montar", "Elevar"], cat: "Actions", hint: "Putting a file on the cloud" },
         { en: "Settings", es: "Configuración", alt: ["Ajustes", "Opciones", "Seteo"], cat: "UI Navigation", hint: "Menu for changing preferences" },
-        { en: "Search", es: "Buscar", alt: ["Investigar", "Mirar", "Explorar"], cat: "UI Actions", hint: "Finding something via input" },
-        
-        // --- HARDWARE (Mexico focus) ---
         { en: "Computer", es: "La computadora", alt: ["El ordenador", "El computador", "La máquina"], cat: "Hardware", hint: "General term (Mexico/LatAm)" },
-        { en: "Laptop", es: "La laptop / La computadora portátil", alt: ["El ordenador portátil", "La libreta", "El portátil"], cat: "Hardware", hint: "Portable computer" },
+        { en: "Laptop", es: "La laptop", alt: ["El ordenador portátil", "La libreta", "El portátil"], cat: "Hardware", hint: "Portable computer" },
         { en: "Mouse", es: "El ratón", alt: ["El mouse", "El apuntador", "El deslizador"], cat: "Hardware", hint: "Pointing device" },
-        { en: "Keyboard", es: "El teclado", alt: ["Las teclas", "La botonera", "El typer"], cat: "Hardware", hint: "Input device" },
-        { en: "Screen", es: "La pantalla", alt: ["El monitor", "El vidrio", "La visión"], cat: "Hardware", hint: "Display surface" },
-        { en: "Headphones", es: "Los audífonos", alt: ["Los cascos", "Los auriculares", "Las orejeras"], cat: "Hardware", hint: "Audio device (LatAm pref)" },
-        
-        // --- SOFTWARE & INTERNET ---
-        { en: "The Cloud", es: "La nube", alt: ["El cielo", "El servidor", "La red"], cat: "Internet", hint: "Remote storage" },
-        { en: "Browser", es: "El navegador", alt: ["El buscador", "El explorador", "La ventana"], cat: "Software", hint: "Chrome, Edge, Firefox" },
-        { en: "Link", es: "El enlace", alt: ["El link", "La conexión", "El puente"], cat: "Internet", hint: "Hyperlink connection" },
-        { en: "Password", es: "La contraseña", alt: ["La clave", "El código", "El password"], cat: "Security", hint: "Secret access string" },
-        { en: "User Profile", es: "El perfil de usuario", alt: ["La cuenta", "La cara", "El dato"], cat: "Social Media", hint: "Personal page" },
-        
-        // --- AI & TECH SPECIFIC ---
-        { en: "To debug", es: "Depurar", alt: ["Desbuguear", "Arreglar", "Limpiar"], cat: "Dev Lingo", hint: "Fixing code errors" },
-        { en: "Database", es: "La base de datos", alt: ["El banco de datos", "La información", "El archivo"], cat: "Backend", hint: "Where data is stored" },
-        { en: "To tag", es: "Etiquetar", alt: ["Nombrar", "Marcar", "Señalar"], cat: "Social Media", hint: "Identifying someone in a post" },
-        { en: "Update (noun)", es: "La actualización", alt: ["La mejora", "El update", "La subida"], cat: "System", hint: "New software version" },
-        { en: "Default", es: "Predeterminado", alt: ["Por defecto", "Estándar", "Normal"], cat: "Settings", hint: "Original setting" },
+        { en: "The Cloud", es: "La nube", alt: ["El cielo", "El servidor", "La red"], cat: "Internet", hint: "Remote storage" }
     ];
 
+    // --- DATABASE 2: HARDER PHRASES ---
+    const dataLevel2 = [
+        { en: "We’re having trouble completing your request.", es: "Hubo un problema al completar tu solicitud.", alt: ["Tenemos problemas para completar tu solicitud.", "Estamos teniendo fallas con tu petición.", "Tu solicitud no se completó por nuestra culpa."], cat: "Friction Message", hint: "Passive voice is preferred over 'We have problems'" },
+        { en: "Your results may vary while the model is adapting.", es: "Los resultados pueden variar mientras el modelo aprende.", alt: ["Tus resultados pueden cambiar mientras el modelo se adapta.", "Resultados diferentes mientras la IA cambia.", "El modelo está variando tus resultados."], cat: "AI/ML", hint: "Use 'Aprende' (Learns) for AI, and avoid possessive 'Tus' for generic results." },
+        { en: "Allow access to your microphone for this feature to work?", es: "¿Permites el acceso al micrófono para usar esta función?", alt: ["¿Permites el acceso a tu micrófono para que esta función funcione?", "¿Das permiso al micro para que sirva?", "¿Habilitar micrófono para funcionalidad?"], cat: "Permissions", hint: "Avoid the cacophony of 'función funcione'." },
+        { en: "Choose the options that apply to you.", es: "Elige las opciones que apliquen en tu caso.", alt: ["Elige las opciones que apliquen para ti.", "Escoge lo que te aplica.", "Selecciona opciones para ti."], cat: "Onboarding", hint: "'Apply to you' is an Anglicism. Use 'In your case'." },
+        { en: "If the problem continues, contact support.", es: "Si el problema persiste, contacta a soporte.", alt: ["Si el problema continúa, habla con el soporte.", "Si sigue el error, llama a ayuda.", "De continuar el problema, contactar servicio."], cat: "Support", hint: "Use 'Persiste' for professional tone." },
+        { en: "The file format isn’t supported.", es: "El formato del archivo no es admitido.", alt: ["El formato del archivo no es compatible.", "No soportamos este archivo.", "Archivo con formato malo."], cat: "System Error", hint: "OS level usually uses 'Admitido' over 'Compatible' for file types." }
+    ];
+
+    let currentDB = [];
     let currentQ = 0;
     let score = 0;
-    let shuffledDB = [];
 
     function shuffle(array) {
         return array.sort(() => Math.random() - 0.5);
     }
 
-    function init() {
-        shuffledDB = shuffle([...database]); // randomize order of questions
+    // FUNCTION TO SHOW THE MENU
+    function showMenu() {
+        const menu = document.getElementById('menu');
+        const quiz = document.getElementById('quiz');
+        
+        quiz.style.display = 'none';
+        menu.style.display = 'grid';
+        
+        // Trigger animation replay for menu
+        menu.classList.remove('fade-in');
+        void menu.offsetWidth; // trigger reflow
+        menu.classList.add('fade-in');
+    }
+
+    function startLevel(level) {
+        // 1. Select Database
+        if(level === 1) currentDB = shuffle([...dataLevel1]);
+        else currentDB = shuffle([...dataLevel2]);
+
+        // 2. Reset Stats
+        currentQ = 0;
+        score = 0;
+
+        // 3. Rebuild UI Structure (Important because "End Screen" wipes it)
+        const quizDiv = document.getElementById('quiz');
+        quizDiv.innerHTML = `
+            <div class="progress">
+                <span id="score">Score: 0</span>
+                <span id="counter">1 / ${currentDB.length}</span>
+            </div>
+            <div class="term-display">
+                <span class="category-tag" id="category"></span>
+                <div class="english-term" id="question"></div>
+                <div class="context-hint" id="context"></div>
+            </div>
+            <div class="options-grid" id="options"></div>
+            <div class="feedback-area" id="feedback">
+                <div id="explanation" style="margin-bottom:10px;"></div>
+                <button class="next-btn" onclick="nextQuestion()">Next</button>
+            </div>
+            <button class="home-btn" onclick="showMenu()">Back to Menu</button>
+        `;
+
+        // 4. Toggle Visibility & Animate
+        document.getElementById('menu').style.display = 'none';
+        quizDiv.style.display = 'block';
+        
+        // Reset and trigger animation
+        quizDiv.classList.remove('fade-in');
+        void quizDiv.offsetWidth; // trigger reflow
+        quizDiv.classList.add('fade-in');
+
+        // 5. Load First Question
         loadQuestion();
     }
 
     function loadQuestion() {
-        const item = shuffledDB[currentQ];
+        const item = currentDB[currentQ];
         
-        // Update UI text
-        document.getElementById('counter').innerText = `${currentQ + 1} / ${shuffledDB.length}`;
+        document.getElementById('counter').innerText = `${currentQ + 1} / ${currentDB.length}`;
         document.getElementById('category').innerText = item.cat;
         document.getElementById('question').innerText = item.en;
         document.getElementById('context').innerText = item.hint;
         document.getElementById('feedback').style.display = 'none';
 
-        // Prepare options (Correct + 3 Distractors)
-        // We take the correct answer, plus the 'alt' array
         let choices = [{txt: item.es, isCorrect: true}];
         item.alt.forEach(alt => choices.push({txt: alt, isCorrect: false}));
-        
         choices = shuffle(choices);
 
         const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = ''; // clear old buttons
+        optionsDiv.innerHTML = ''; 
 
         choices.forEach(choice => {
             const btn = document.createElement('button');
@@ -250,7 +347,6 @@
     }
 
     function checkAnswer(btn, isCorrect, correctAnswer) {
-        // Disable all buttons to prevent double clicking
         const allBtns = document.querySelectorAll('.option-btn');
         allBtns.forEach(b => b.disabled = true);
 
@@ -260,36 +356,41 @@
 
         if (isCorrect) {
             btn.classList.add('correct');
-            explanation.innerHTML = `<strong>Correct!</strong> <br>"${correctAnswer}" is the standard term.`;
+            explanation.innerHTML = `<strong>Correct!</strong> <br>"${correctAnswer}" is the standard.`;
             score++;
             document.getElementById('score').innerText = `Score: ${score}`;
         } else {
             btn.classList.add('wrong');
-            // Highlight the real answer
             allBtns.forEach(b => {
                 if(b.innerText === correctAnswer) b.classList.add('correct');
             });
-            explanation.innerHTML = `<strong>Incorrect.</strong> <br>The localization standard is "${correctAnswer}".`;
+            explanation.innerHTML = `<strong>Incorrect.</strong> <br>Standard use is: "${correctAnswer}".`;
         }
     }
 
     function nextQuestion() {
         currentQ++;
-        if (currentQ < shuffledDB.length) {
+        if (currentQ < currentDB.length) {
             loadQuestion();
         } else {
-            // End of quiz
-            document.getElementById('quiz-card').innerHTML = `
-                <h2>Drill Complete!</h2>
-                <p>Final Score: ${score} / ${shuffledDB.length}</p>
-                <button class="next-btn" onclick="location.reload()">Restart</button>
+            // End of Quiz Screen
+            const quizDiv = document.getElementById('quiz');
+            // Trigger animation for end screen
+            quizDiv.classList.remove('fade-in');
+            void quizDiv.offsetWidth;
+            quizDiv.classList.add('fade-in');
+
+            quizDiv.innerHTML = `
+                <h2>Level Complete!</h2>
+                <p>Final Score: ${score} / ${currentDB.length}</p>
+                <div style="margin-top:20px;">
+                    <button class="next-btn" onclick="startLevel(${currentDB === dataLevel1 ? 1 : 2})">Replay Level</button>
+                    <br><br>
+                    <button class="next-btn" style="background:#4b5563" onclick="showMenu()">Choose Another Level</button>
+                </div>
             `;
         }
     }
-
-    // Start App
-    init();
-
 </script>
 
 </body>
