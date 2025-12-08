@@ -10,12 +10,14 @@ The quiz teaches how to distinguish preferred professional translations from reg
 [Launch the App](https://ashleysally00.github.io/es-mx-ui-quiz/)
 
 
-**UX Terminology Reference Table:**  
+**UX Terminology and Phrases Used in the Quiz**
 
-A static reference page containing the Level 2 UX phrases used in the quiz.  
-This page is for review only and is *not* part of the interactive quiz.
+Static reference pages with the terminology and phrases included in the quiz.  
+These pages are for review only and are not part of the interactive app.
 
-[View Level 2 Reference Table](https://ashleysally00.github.io/es-mx-ui-quiz/level2.html)
+[View Level 1 Reference Table](https://ashleysally00.github.io/es-mx-ui-quiz/terminology-level1.html)  
+[View Level 2 Reference Table](https://ashleysally00.github.io/es-mx-ui-quiz/terminology-level2.html)
+
 
 ## Features
 
