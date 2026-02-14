@@ -223,6 +223,14 @@
                 </div>
                 <span>➔</span>
             </button>
+
+            <button class="level-btn" onclick="startLevel(3)">
+                <div style="text-align: left;">
+                    Level 3: Industry & Product Terms
+                    <div class="level-desc">Transportation, Delivery, and E-commerce</div>
+                </div>
+                <span>➔</span>
+            </button>
         </div>
 
         <div id="quiz" class="quiz-interface">
@@ -249,12 +257,36 @@
 
     // --- DATABASE 2: HARDER PHRASES ---
     const dataLevel2 = [
-        { en: "We’re having trouble completing your request.", es: "Hubo un problema al completar tu solicitud.", alt: ["Tenemos problemas para completar tu solicitud.", "Estamos teniendo fallas con tu petición.", "Tu solicitud no se completó por nuestra culpa."], cat: "Friction Message", hint: "Passive voice is preferred over 'We have problems'" },
+        { en: "We're having trouble completing your request.", es: "Hubo un problema al completar tu solicitud.", alt: ["Tenemos problemas para completar tu solicitud.", "Estamos teniendo fallas con tu petición.", "Tu solicitud no se completó por nuestra culpa."], cat: "Friction Message", hint: "Passive voice is preferred over 'We have problems'" },
         { en: "Your results may vary while the model is adapting.", es: "Los resultados pueden variar mientras el modelo aprende.", alt: ["Tus resultados pueden cambiar mientras el modelo se adapta.", "Resultados diferentes mientras la IA cambia.", "El modelo está variando tus resultados."], cat: "AI/ML", hint: "Use 'Aprende' (Learns) for AI, and avoid possessive 'Tus' for generic results." },
         { en: "Allow access to your microphone for this feature to work?", es: "¿Permites el acceso al micrófono para usar esta función?", alt: ["¿Permites el acceso a tu micrófono para que esta función funcione?", "¿Das permiso al micro para que sirva?", "¿Habilitar micrófono para funcionalidad?"], cat: "Permissions", hint: "Avoid the cacophony of 'función funcione'." },
         { en: "Choose the options that apply to you.", es: "Elige las opciones que apliquen en tu caso.", alt: ["Elige las opciones que apliquen para ti.", "Escoge lo que te aplica.", "Selecciona opciones para ti."], cat: "Onboarding", hint: "'Apply to you' is an Anglicism. Use 'In your case'." },
         { en: "If the problem continues, contact support.", es: "Si el problema persiste, contacta a soporte.", alt: ["Si el problema continúa, habla con el soporte.", "Si sigue el error, llama a ayuda.", "De continuar el problema, contactar servicio."], cat: "Support", hint: "Use 'Persiste' for professional tone." },
-        { en: "The file format isn’t supported.", es: "El formato del archivo no es admitido.", alt: ["El formato del archivo no es compatible.", "No soportamos este archivo.", "Archivo con formato malo."], cat: "System Error", hint: "OS level usually uses 'Admitido' over 'Compatible' for file types." }
+        { en: "The file format isn't supported.", es: "El formato del archivo no es admitido.", alt: ["El formato del archivo no es compatible.", "No soportamos este archivo.", "Archivo con formato malo."], cat: "System Error", hint: "OS level usually uses 'Admitido' over 'Compatible' for file types." }
+    ];
+
+    // --- DATABASE 3: INDUSTRY TERMS ---
+    const dataLevel3 = [
+        { en: "Driver", es: "Socio Conductor", alt: ["Conductor", "Chofer", "Piloto"], cat: "Rideshare", hint: "Uber/Didi standard term in Mexico" },
+        { en: "Meet your driver", es: "Encuentra a tu Socio Conductor", alt: ["Encuentra a tu conductor", "Ve con tu chofer", "Localiza tu driver"], cat: "Rideshare", hint: "Must match 'Socio Conductor' terminology" },
+        { en: "Pickup", es: "Punto de encuentro", alt: ["Recogida", "Punto de partida", "Origen"], cat: "Rideshare", hint: "Where you meet the driver" },
+        { en: "Drop-off", es: "Punto de destino", alt: ["Destino", "Bajada", "Llegada"], cat: "Rideshare", hint: "Symmetric with 'Punto de encuentro'" },
+        { en: "Carpool", es: "Auto compartido", alt: ["Viaje compartido", "Carpooling", "Aventón grupal"], cat: "Rideshare", hint: "Different from 'Viaje compartido' (rideshare)" },
+        { en: "ETA", es: "Tiempo estimado de llegada", alt: ["Hora de llegada", "Llegada estimada", "ETA"], cat: "Rideshare", hint: "Full phrase preferred over acronym" },
+        { en: "Delivery fee", es: "Costo de envío", alt: ["Tarifa de entrega", "Fee de delivery", "Cargo por envío"], cat: "Delivery", hint: "'Costo' used for Mexico, 'Tarifa' more formal" },
+        { en: "Courier", es: "Repartidor", alt: ["Mensajero", "Delivery", "Courier"], cat: "Delivery", hint: "Standard term for delivery person" },
+        { en: "Leave at door", es: "Dejar en la puerta", alt: ["Dejar afuera", "Dejar sin contacto", "Dejar en entrada"], cat: "Delivery", hint: "Contactless delivery instruction" },
+        { en: "Out for delivery", es: "En camino", alt: ["En ruta de entrega", "Salió para entrega", "En tránsito"], cat: "Delivery", hint: "Active delivery status" },
+        { en: "Invoice", es: "Factura (CFDI)", alt: ["Factura", "Recibo fiscal", "Comprobante"], cat: "E-commerce", hint: "Mexico's tax-valid invoice system" },
+        { en: "Tax", es: "Impuesto (IVA)", alt: ["Impuestos", "IVA", "Gravamen"], cat: "E-commerce", hint: "IVA is Mexico's VAT system" },
+        { en: "Add to cart", es: "Agregar al carrito", alt: ["Añadir al carro", "Meter al carrito", "Agregar a la bolsa"], cat: "E-commerce", hint: "Standard shopping term" },
+        { en: "Checkout", es: "Finalizar compra", alt: ["Pagar", "Ir a pagar", "Proceder al pago"], cat: "E-commerce", hint: "Completing the purchase process" },
+        { en: "Promo code", es: "Código promocional", alt: ["Cupón", "Código de descuento", "Código promo"], cat: "E-commerce", hint: "Discount code field" },
+        { en: "Refund", es: "Reembolso", alt: ["Devolución de dinero", "Reintegro", "Devolución"], cat: "E-commerce", hint: "Money back, not item return" },
+        { en: "Privacy Policy", es: "Aviso de Privacidad", alt: ["Política de Privacidad", "Política de privacidad", "Aviso privacidad"], cat: "Legal", hint: "Mexico's legal term for privacy notice" },
+        { en: "Terms of Service", es: "Términos del Servicio", alt: ["Condiciones de Servicio", "Términos y Condiciones", "TOS"], cat: "Legal", hint: "Service agreement document" },
+        { en: "Two-factor authentication", es: "Autenticación de dos factores", alt: ["Verificación en dos pasos", "Doble autenticación", "2FA"], cat: "Security", hint: "Security feature for accounts" },
+        { en: "Loyalty program", es: "Programa de recompensas", alt: ["Programa de lealtad", "Programa de fidelidad", "Recompensas"], cat: "Marketing", hint: "Rewards for repeat customers" }
     ];
 
     let currentDB = [];
@@ -282,7 +314,8 @@
     function startLevel(level) {
         // 1. Select Database
         if(level === 1) currentDB = shuffle([...dataLevel1]);
-        else currentDB = shuffle([...dataLevel2]);
+        else if(level === 2) currentDB = shuffle([...dataLevel2]);
+        else currentDB = shuffle([...dataLevel3]);
 
         // 2. Reset Stats
         currentQ = 0;
@@ -380,11 +413,12 @@
             void quizDiv.offsetWidth;
             quizDiv.classList.add('fade-in');
 
+            const levelNum = currentDB === dataLevel1 ? 1 : (currentDB === dataLevel2 ? 2 : 3);
             quizDiv.innerHTML = `
                 <h2>Level Complete!</h2>
                 <p>Final Score: ${score} / ${currentDB.length}</p>
                 <div style="margin-top:20px;">
-                    <button class="next-btn" onclick="startLevel(${currentDB === dataLevel1 ? 1 : 2})">Replay Level</button>
+                    <button class="next-btn" onclick="startLevel(${levelNum})">Replay Level</button>
                     <br><br>
                     <button class="next-btn" style="background:#4b5563" onclick="showMenu()">Choose Another Level</button>
                 </div>
