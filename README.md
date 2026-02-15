@@ -8,7 +8,8 @@ The quiz teaches how to distinguish preferred professional translations from reg
 
 ## Live Demo
 
-**[Launch the Quiz App](https://ashleysally00.github.io/es-mx-ui-quiz/)**
+**[Launch the Quiz App](https://ashleysally00.github.io/es-mx-ui-quiz/)**     
+**[Study with Flashcards](https://ashleysally00.github.io/es-mx-ui-quiz/flashcards.html)**
 
 **Reference Tables:**  
 [View Level 1 Terms Reference](https://ashleysally00.github.io/es-mx-ui-quiz/reference-level1.html)  
