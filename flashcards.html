@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L10n Flashcards</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --error: #dc2626;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); }
+        p.subtitle { color: #6b7280; font-size: 0.9rem; }
+
+        .card-container {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .fade-in {
+            animation: fade 0.4s ease-out;
+        }
+        
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MENU STYLES */
+        .level-menu {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .level-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .level-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .level-desc {
+            font-size: 0.8rem;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 4px;
+            text-align: left;
+        }
+
+        /* FLASHCARD STYLES */
+        .flashcard-interface { display: none; }
+
+        .progress {
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 300px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 40px;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        .flashcard:active {
+            transform: scale(0.98);
+        }
+
+        .card-side {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .card-hint {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .next-btn:hover { background: #1d4ed8; }
+
+        .shuffle-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .shuffle-btn:hover { background: #4b5563; }
+        
+        .home-btn {
+            background: transparent;
+            color: #6b7280;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.95rem;
+        }
+
+        .flip-hint {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>L10n Flashcards: US Spanish/Mexico</h1>
+        <p class="subtitle">Study vocabulary by level</p>
+    </header>
+
+    <div class="card-container" id="main-card">
+        
+        <div id="menu" class="level-menu fade-in">
+            <button class="level-btn" onclick="startLevel(1)">
+                <div style="text-align: left;">
+                    Level 1: Basic Terminology
+                    <div class="level-desc">Single words & Buttons (Submit, Save, Cloud)</div>
+                </div>
+                <span>➔</span>
+            </button>
+            
+            <button class="level-btn" onclick="startLevel(2)">
+                <div style="text-align: left;">
+                    Level 2: UX Phrases
+                    <div class="level-desc">Friction, Onboarding, and Errors</div>
+                </div>
+                <span>➔</span>
+            </button>
+
+            <button class="level-btn" onclick="startLevel(3)">
+                <div style="text-align: left;">
+                    Level 3: Industry & Product Terms
+                    <div class="level-desc">Transportation, Delivery, and E-commerce</div>
+                </div>
+                <span>➔</span>
+            </button>
+        </div>
+
+        <div id="flashcards" class="flashcard-interface">
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    // --- DATABASE 1: BASICS ---
+    const dataLevel1 = [
+        { en: "Submit", es: "Enviar", cat: "UI Buttons", hint: "Button context: Sending a form" },
+        { en: "Save", es: "Guardar", cat: "UI Buttons", hint: "Preserving data/files" },
+        { en: "Cancel", es: "Cancelar", cat: "UI Buttons", hint: "Stop an action" },
+        { en: "Log in", es: "Iniciar sesión", cat: "Authentication", hint: "Standard Google/FB term in LatAm" },
+        { en: "Log out", es: "Cerrar sesión", cat: "Authentication", hint: "Ending a session" },
+        { en: "Download", es: "Descargar", cat: "Actions", hint: "Getting a file from internet" },
+        { en: "Settings", es: "Configuración", cat: "UI Navigation", hint: "Menu for changing preferences" },
+        { en: "Computer", es: "La computadora", cat: "Hardware", hint: "General term (Mexico/LatAm)" },
+        { en: "Laptop", es: "La laptop", cat: "Hardware", hint: "Portable computer" },
+        { en: "Mouse", es: "El ratón", cat: "Hardware", hint: "Pointing device" },
+        { en: "The Cloud", es: "La nube", cat: "Internet", hint: "Remote storage" }
+    ];
+
+    // --- DATABASE 2: HARDER PHRASES ---
+    const dataLevel2 = [
+        { en: "We're having trouble completing your request.", es: "Hubo un problema al completar tu solicitud.", cat: "Friction Message", hint: "Passive voice is preferred over 'We have problems'" },
+        { en: "Your results may vary while the model is adapting.", es: "Los resultados pueden variar mientras el modelo aprende.", cat: "AI/ML", hint: "Use 'Aprende' (Learns) for AI" },
+        { en: "Allow access to your microphone for this feature to work?", es: "¿Permites el acceso al micrófono para usar esta función?", cat: "Permissions", hint: "Avoid the cacophony of 'función funcione'" },
+        { en: "Choose the options that apply to you.", es: "Elige las opciones que apliquen en tu caso.", cat: "Onboarding", hint: "'Apply to you' is an Anglicism" },
+        { en: "If the problem continues, contact support.", es: "Si el problema persiste, contacta a soporte.", cat: "Support", hint: "Use 'Persiste' for professional tone" },
+        { en: "The file format isn't supported.", es: "El formato del archivo no es admitido.", cat: "System Error", hint: "OS level uses 'Admitido'" }
+    ];
+
+    // --- DATABASE 3: INDUSTRY TERMS ---
+    const dataLevel3 = [
+        { en: "Driver (rideshare partner)", es: "Socio Conductor", cat: "Rideshare", hint: "Professional Uber/Didi driver" },
+        { en: "Driver (general)", es: "Conductor", cat: "Rideshare", hint: "Any person driving" },
+        { en: "Passenger/Rider", es: "Pasajero", cat: "Rideshare", hint: "Person being driven" },
+        { en: "Meet your driver", es: "Encuentra a tu Socio Conductor", cat: "Rideshare", hint: "Must match 'Socio Conductor'" },
+        { en: "Pickup", es: "Punto de encuentro", cat: "Rideshare", hint: "Where you meet the driver" },
+        { en: "Drop-off", es: "Punto de destino", cat: "Rideshare", hint: "Symmetric with 'Punto de encuentro'" },
+        { en: "Carpool", es: "Auto compartido", cat: "Rideshare", hint: "Different from 'Viaje compartido'" },
+        { en: "ETA", es: "Tiempo estimado de llegada", cat: "Rideshare", hint: "Full phrase preferred" },
+        { en: "Delivery fee", es: "Costo de envío", cat: "Delivery", hint: "'Costo' used for Mexico" },
+        { en: "Courier", es: "Repartidor", cat: "Delivery", hint: "Delivery person" },
+        { en: "Leave at door", es: "Dejar en la puerta", cat: "Delivery", hint: "Contactless delivery" },
+        { en: "Out for delivery", es: "En camino", cat: "Delivery", hint: "Active delivery status" },
+        { en: "Invoice", es: "Factura (CFDI)", cat: "E-commerce", hint: "Mexico's tax-valid invoice" },
+        { en: "Tax", es: "Impuesto (IVA)", cat: "E-commerce", hint: "Mexico's VAT system" },
+        { en: "Add to cart", es: "Agregar al carrito", cat: "E-commerce", hint: "Standard shopping term" },
+        { en: "Checkout", es: "Finalizar compra", cat: "E-commerce", hint: "Complete purchase" },
+        { en: "Promo code", es: "Código promocional", cat: "E-commerce", hint: "Discount code" },
+        { en: "Refund", es: "Reembolso", cat: "E-commerce", hint: "Money back" },
+        { en: "Privacy Policy", es: "Aviso de Privacidad", cat: "Legal", hint: "Mexico's legal term" },
+        { en: "Terms of Service", es: "Términos del Servicio", cat: "Legal", hint: "Service agreement" }
+    ];
+
+    let currentDB = [];
+    let currentIndex = 0;
+    let isFlipped = false;
+
+    function shuffle(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function showMenu() {
+        const menu = document.getElementById('menu');
+        const flashcards = document.getElementById('flashcards');
+        
+        flashcards.style.display = 'none';
+        menu.style.display = 'grid';
+        
+        menu.classList.remove('fade-in');
+        void menu.offsetWidth;
+        menu.classList.add('fade-in');
+    }
+
+    function startLevel(level) {
+        if(level === 1) currentDB = shuffle([...dataLevel1]);
+        else if(level === 2) currentDB = shuffle([...dataLevel2]);
+        else currentDB = shuffle([...dataLevel3]);
+
+        currentIndex = 0;
+        isFlipped = false;
+
+        const flashcardsDiv = document.getElementById('flashcards');
+        flashcardsDiv.innerHTML = `
+            <div class="progress" id="progress">Card 1 of ${currentDB.length}</div>
+            
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div id="card-content"></div>
+            </div>
+
+            <p class="flip-hint">Click card to flip</p>
+
+            <div class="controls">
+                <button class="shuffle-btn" onclick="shuffleDeck()">Shuffle</button>
+                <button class="next-btn" onclick="nextCard()">Next Card</button>
+            </div>
+            
+            <button class="home-btn" onclick="showMenu()">Back to Menu</button>
+        `;
+
+        document.getElementById('menu').style.display = 'none';
+        flashcardsDiv.style.display = 'block';
+        
+        flashcardsDiv.classList.remove('fade-in');
+        void flashcardsDiv.offsetWidth;
+        flashcardsDiv.classList.add('fade-in');
+
+        showCard();
+    }
+
+    function showCard() {
+        const item = currentDB[currentIndex];
+        const cardContent = document.getElementById('card-content');
+        
+        isFlipped = false;
+        
+        cardContent.innerHTML = `
+            <div class="card-label">English</div>
+            <div class="card-side">${item.en}</div>
+            <div class="card-hint">${item.cat}</div>
+        `;
+        
+        document.getElementById('progress').innerText = `Card ${currentIndex + 1} of ${currentDB.length}`;
+    }
+
+    function flipCard() {
+        const item = currentDB[currentIndex];
+        const cardContent = document.getElementById('card-content');
+        
+        isFlipped = !isFlipped;
+        
+        if (isFlipped) {
+            cardContent.innerHTML = `
+                <div class="card-label">Spanish</div>
+                <div class="card-side">${item.es}</div>
+                <div class="card-hint">${item.hint}</div>
+            `;
+        } else {
+            cardContent.innerHTML = `
+                <div class="card-label">English</div>
+                <div class="card-side">${item.en}</div>
+                <div class="card-hint">${item.cat}</div>
+            `;
+        }
+    }
+
+    function nextCard() {
+        currentIndex++;
+        if (currentIndex >= currentDB.length) {
+            currentIndex = 0;
+        }
+        showCard();
+    }
+
+    function shuffleDeck() {
+        currentDB = shuffle(currentDB);
+        currentIndex = 0;
+        showCard();
+    }
+</script>
+
+</body>
+</html>
