@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Localization Patterns</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+            background: #f6f8fa;
+            margin: 0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        .header {
+            background: #0969da;
+            color: white;
+            padding: 16px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f6f8fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #24292f;
+            border-bottom: 2px solid #d0d7de;
+            font-size: 14px;
+            text-transform: capitalize;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #d0d7de;
+            color: #24292f;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        tr:hover {
+            background: #f6f8fa;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .category {
+            font-weight: 600;
+            color: #0969da;
+        }
+        .hint {
+            color: #656d76;
+            font-style: italic;
+        }
+        .stats {
+            padding: 12px 20px;
+            background: #f6f8fa;
+            color: #656d76;
+            font-size: 13px;
+            border-top: 1px solid #d0d7de;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Code Localization Patterns - Mexican Spanish (es-MX)
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>English</th>
+                    <th>Spanish</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="category">Variables</td>
+                    <td>"Hello, {name}!"</td>
+                    <td>"¡Hola, {name}!"</td>
+                    <td class="hint">Keep variable syntax unchanged</td>
+                </tr>
+                <tr>
+                    <td class="category">Variables</td>
+                    <td>"You have {count} items"</td>
+                    <td>"Tienes {count} artículos"</td>
+                    <td class="hint">Needs plural: "1 artículo" vs "3 artículos"</td>
+                </tr>
+                <tr>
+                    <td class="category">Variables</td>
+                    <td>"{user} sent you a message"</td>
+                    <td>"{user} te envió un mensaje"</td>
+                    <td class="hint">Variable placement may shift with word order</td>
+                </tr>
+                <tr>
+                    <td class="category">Variables</td>
+                    <td>"Order #{id} confirmed"</td>
+                    <td>"Pedido #{id} confirmado"</td>
+                    <td class="hint">Preserve symbols like #</td>
+                </tr>
+                <tr>
+                    <td class="category">Variables</td>
+                    <td>"Price: ${amount}"</td>
+                    <td>"Precio: ${amount}"</td>
+                    <td class="hint">MX uses $ for pesos; use Intl.NumberFormat</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"Welcome, {{username}}!"</td>
+                    <td>"¡Te damos la bienvenida, {{username}}!"</td>
+                    <td class="hint">Gender-neutral; preserve {{brackets}}</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"You have {{count}} item in your cart"</td>
+                    <td>"Tienes {{count}} artículo en tu carrito"</td>
+                    <td class="hint">Singular form for items_in_cart_singular key</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"You have {{count}} items in your cart"</td>
+                    <td>"Tienes {{count}} artículos en tu carrito"</td>
+                    <td class="hint">Plural form for items_in_cart_plural key</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"{{driverName}} is arriving in {{minutes}} minute"</td>
+                    <td>"{{driverName}} está llegando en {{minutes}} minuto"</td>
+                    <td class="hint">Singular: 1 minuto</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"{{driverName}} is arriving in {{minutes}} minutes"</td>
+                    <td>"{{driverName}} está llegando en {{minutes}} minutos"</td>
+                    <td class="hint">Plural: 2+ minutos</td>
+                </tr>
+                <tr>
+                    <td class="category">JSON</td>
+                    <td>"Click &lt;a href='{{url}}'&gt;here&lt;/a&gt; to continue"</td>
+                    <td>"Haz clic &lt;a href='{{url}}'&gt;aquí&lt;/a&gt; para continuar"</td>
+                    <td class="hint">Preserve HTML tags and variables</td>
+                </tr>
+                <tr>
+                    <td class="category">Success</td>
+                    <td>"Successfully saved"</td>
+                    <td>"Guardado correctamente"</td>
+                    <td class="hint">Confirmation message</td>
+                </tr>
+                <tr>
+                    <td class="category">Success</td>
+                    <td>"Payment complete"</td>
+                    <td>"Pago completado"</td>
+                    <td class="hint">Transaction finished</td>
+                </tr>
+                <tr>
+                    <td class="category">Success</td>
+                    <td>"Your changes have been saved"</td>
+                    <td>"Se guardaron tus cambios"</td>
+                    <td class="hint">Passive voice preferred</td>
+                </tr>
+                <tr>
+                    <td class="category">Error</td>
+                    <td>"Something went wrong"</td>
+                    <td>"Algo salió mal"</td>
+                    <td class="hint">Generic error message</td>
+                </tr>
+                <tr>
+                    <td class="category">Error</td>
+                    <td>"Please try again"</td>
+                    <td>"Inténtalo de nuevo"</td>
+                    <td class="hint">Retry prompt</td>
+                </tr>
+                <tr>
+                    <td class="category">Error</td>
+                    <td>"Invalid email address"</td>
+                    <td>"Dirección de correo electrónico no válida"</td>
+                    <td class="hint">Validation error</td>
+                </tr>
+                <tr>
+                    <td class="category">Error</td>
+                    <td>"This field is required"</td>
+                    <td>"Este campo es obligatorio"</td>
+                    <td class="hint">Form validation</td>
+                </tr>
+                <tr>
+                    <td class="category">Loading</td>
+                    <td>"Loading..."</td>
+                    <td>"Cargando..."</td>
+                    <td class="hint">Standard loading state</td>
+                </tr>
+                <tr>
+                    <td class="category">Loading</td>
+                    <td>"Please wait"</td>
+                    <td>"Espera..."</td>
+                    <td class="hint">Consumer apps prefer concise</td>
+                </tr>
+                <tr>
+                    <td class="category">Loading</td>
+                    <td>"Processing your request"</td>
+                    <td>"Procesando tu solicitud"</td>
+                    <td class="hint">Active processing state</td>
+                </tr>
+                <tr>
+                    <td class="category">Confirmation</td>
+                    <td>"Are you sure?"</td>
+                    <td>"¿Confirmas esta acción?"</td>
+                    <td class="hint">Gender-neutral confirmation</td>
+                </tr>
+                <tr>
+                    <td class="category">Confirmation</td>
+                    <td>"This action cannot be undone"</td>
+                    <td>"Esta acción no se puede deshacer"</td>
+                    <td class="hint">Destructive action warning</td>
+                </tr>
+                <tr>
+                    <td class="category">Confirmation</td>
+                    <td>"Do you want to continue?"</td>
+                    <td>"¿Deseas continuar?"</td>
+                    <td class="hint">Proceed prompt</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Continue"</td>
+                    <td>"Continuar"</td>
+                    <td class="hint">Primary action</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Cancel"</td>
+                    <td>"Cancelar"</td>
+                    <td class="hint">Dismiss action</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Save changes"</td>
+                    <td>"Guardar cambios"</td>
+                    <td class="hint">Commit edits</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Delete"</td>
+                    <td>"Eliminar"</td>
+                    <td class="hint">Destructive action</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Confirm"</td>
+                    <td>"Confirmar"</td>
+                    <td class="hint">Verify action</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Go back"</td>
+                    <td>"Volver"</td>
+                    <td class="hint">Navigate backwards</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Try again"</td>
+                    <td>"Intentar de nuevo"</td>
+                    <td class="hint">Retry after error</td>
+                </tr>
+                <tr>
+                    <td class="category">Buttons</td>
+                    <td>"Learn more"</td>
+                    <td>"Más información"</td>
+                    <td class="hint">Additional details</td>
+                </tr>
+                <tr>
+                    <td class="category">Forms</td>
+                    <td>"Enter your email"</td>
+                    <td>"Ingresa tu correo electrónico"</td>
+                    <td class="hint">Input placeholder/label</td>
+                </tr>
+                <tr>
+                    <td class="category">Forms</td>
+                    <td>"Password"</td>
+                    <td>"Contraseña"</td>
+                    <td class="hint">Password field label</td>
+                </tr>
+                <tr>
+                    <td class="category">Forms</td>
+                    <td>"Optional"</td>
+                    <td>"Opcional"</td>
+                    <td class="hint">Non-required field</td>
+                </tr>
+                <tr>
+                    <td class="category">Forms</td>
+                    <td>"Required field"</td>
+                    <td>"Campo obligatorio"</td>
+                    <td class="hint">Mandatory input</td>
+                </tr>
+                <tr>
+                    <td class="category">Forms</td>
+                    <td>"Search..."</td>
+                    <td>"Buscar..."</td>
+                    <td class="hint">Search input placeholder</td>
+                </tr>
+                <tr>
+                    <td class="category">Time</td>
+                    <td>"Just now"</td>
+                    <td>"Justo ahora"</td>
+                    <td class="hint">Immediate past</td>
+                </tr>
+                <tr>
+                    <td class="category">Time</td>
+                    <td>"Today"</td>
+                    <td>"Hoy"</td>
+                    <td class="hint">Current day</td>
+                </tr>
+                <tr>
+                    <td class="category">Time</td>
+                    <td>"Yesterday"</td>
+                    <td>"Ayer"</td>
+                    <td class="hint">Previous day</td>
+                </tr>
+                <tr>
+                    <td class="category">Time</td>
+                    <td>"{n} minutes ago"</td>
+                    <td>"Hace {n} minutos"</td>
+                    <td class="hint">Plural: "Hace 1 minuto" vs "Hace 2 minutos"</td>
+                </tr>
+                <tr>
+                    <td class="category">Time</td>
+                    <td>"{n} days ago"</td>
+                    <td>"Hace {n} días"</td>
+                    <td class="hint">Plural: "Hace 1 día" vs "Hace 2 días"</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Add to cart"</td>
+                    <td>"Agregar al carrito"</td>
+                    <td class="hint">Shopping action</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Checkout"</td>
+                    <td>"Finalizar compra"</td>
+                    <td class="hint">Complete purchase</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Subtotal"</td>
+                    <td>"Subtotal"</td>
+                    <td class="hint">Pre-tax amount</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Total"</td>
+                    <td>"Total"</td>
+                    <td class="hint">Final amount</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Apply coupon"</td>
+                    <td>"Aplicar cupón"</td>
+                    <td class="hint">Discount code action</td>
+                </tr>
+                <tr>
+                    <td class="category">E-commerce</td>
+                    <td>"Free shipping"</td>
+                    <td>"Envío gratis"</td>
+                    <td class="hint">No delivery charge</td>
+                </tr>
+                <tr>
+                    <td class="category">Notifications</td>
+                    <td>"New message from {sender}"</td>
+                    <td>"Nuevo mensaje de {sender}"</td>
+                    <td class="hint">Message alert</td>
+                </tr>
+                <tr>
+                    <td class="category">Notifications</td>
+                    <td>"You have {count} notifications"</td>
+                    <td>"Tienes {count} notificaciones"</td>
+                    <td class="hint">Plural: "1 notificación" vs "2 notificaciones"</td>
+                </tr>
+                <tr>
+                    <td class="category">Notifications</td>
+                    <td>"{name} liked your post"</td>
+                    <td>"A {name} le gustó tu publicación"</td>
+                    <td class="hint">Social interaction alert</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="stats">
+            50 patterns • Variables, JSON, UX Messages • Use Intl APIs for dates/currency • Escape variables for XSS prevention
+        </div>
+    </div>
+</body>
+</html>
