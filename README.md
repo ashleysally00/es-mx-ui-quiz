@@ -2,7 +2,9 @@
 
 **Also available in French (France):** [fr-fr-ui-quiz](https://github.com/ashleysally00/fr-fr-ui-quiz)
 
-A lightweight, zero-dependency Vanilla JS quiz app for learning **Mexican/US Spanish (es-MX / es-US)** terminology used in UI/UX, software localization, and AI/tech product wording.
+Interactive flashcards for es-MX UX localization terminology used in ride-share, delivery, and product interfaces.
+
+A lightweight, zero-dependency Vanilla JS app for learning Mexican/US Spanish (es-MX / es-US) terminology used in UI/UX, software localization, and AI/tech product wording.
 
 The quiz teaches how to distinguish preferred professional translations from regional variants, Spanglish forms, or misleading alternatives.
 
